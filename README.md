@@ -22,39 +22,40 @@ various weather stations (López and Martínez, 2019).
 You can install the development version of **coriM** as follows
 
 ``` r
-# devtools::install_github("xxguisseppe/coriM")
+ devtools::install_github("xxguisseppe/coriM")
 ```
 
-If you are prompted for the **rnaturalearth** and **MODIStsp**
-libraries, they are installed as follows:
+If you are prompted for the `rnaturalearth` and `MODIStsp` libraries,
+they are installed as follows:
 
-**rnaturalearth library**
+- rnaturalearth library:
 
 ``` r
-# if (!requireNamespace("MODIStsp", quietly = TRUE))  devtools::install_github("ropensci/MODIStsp")
+ if (!requireNamespace("MODIStsp", quietly = TRUE))  devtools::install_github("ropensci/MODIStsp")
 ```
 
-**MODIStsp library**
+- MODIStsp library:
 
 ``` r
-# if (!requireNamespace("rnaturalearth", quietly = TRUE))  devtools::install_github("ropensci/rnaturalearth")
-# if (!requireNamespace("rnaturalearthdata", quietly = TRUE)) devtools::install_github("ropensci/rnaturalearthdata")
-# if (!requireNamespace("rnaturalearthhires", quietly = TRUE)) devtools::install_github("ropensci/rnaturalearthhires")
+ if (!requireNamespace("rnaturalearth", quietly = TRUE))  devtools::install_github("ropensci/rnaturalearth")
+ if (!requireNamespace("rnaturalearthdata", quietly = TRUE)) devtools::install_github("ropensci/rnaturalearthdata")
+ if (!requireNamespace("rnaturalearthhires", quietly = TRUE)) devtools::install_github("ropensci/rnaturalearthhires")
 ```
 
 ## Example
 
 ``` r
+## Loading Library
  library(coriM)
 ```
 
 It starts by loading the data for spatial interpolation.
 
 ``` r
-## Loading data
+## Load example data
  file <- loadData()
 
-## Inspect data
+## Load function for IDW interpolation calculation
  idw_inter(dat = file, sta = TRUE, cntr="peru",coun_cd = 'PE', alt = TRUE, reg = "Puno")
 ```
 
@@ -62,32 +63,8 @@ In the same way, the example for the calculation of monthly average Land
 Surface Temperature obtained from MODIS satellite is presented.
 
 ``` r
-## MODIS LST 
+## Load function for MODIS LST monthly calculation
 mod_lst (sen = "Aqua", usr = "own_user", pass = "own_password",
            bd = "2010.03.01", ed = "2010.03.31", mnth = "March",
            proj = 4326, cntr = "peru",sta = TRUE, reg = "Puno")
 ```
-
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
