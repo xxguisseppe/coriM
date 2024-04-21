@@ -44,6 +44,10 @@ they are installed as follows:
 
 ## Example
 
+The result of the examples produces two files in `TIF format` for the
+selected region. In this case the example is based on the regional map
+of Puno in Peru. The information is from the month of March 2010.
+
 ``` r
 ## Loading Library
  library(coriM)
