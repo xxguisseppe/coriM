@@ -22,7 +22,7 @@ The goal of coriM is to ...
 
 ## Installation
 
-You can install the development version of coriM like so:
+You can install the development version of coriM like sasfdsafsdfsdfsdfo:
 
 ``` r
 # FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
