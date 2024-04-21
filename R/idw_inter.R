@@ -50,7 +50,7 @@ idw_inter <- function(dat, sta, cntr, coun_cd, alt, reg){
   }
 
   #------ Create directory CSV files
-  datadir <- file.path(paste0(getwd(), "/data"))
+  datadir <- file.path(paste0(getwd(), "/IDW"))
   dir.create(datadir, showWarnings=FALSE)
 
 
@@ -136,7 +136,7 @@ idw_inter <- function(dat, sta, cntr, coun_cd, alt, reg){
 
 
   #------ Create directory CSV files
-  datatif <- file.path(paste0(getwd(), "/data/tif"))
+  datatif <- file.path(paste0(datadir, "/tif"))
   dir.create(datatif, showWarnings=FALSE)
 
   # Write the raster to file

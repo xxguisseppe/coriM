@@ -43,7 +43,7 @@ mod_lst  <- function(sen, usr, pass, bd, ed, mnth, proj, cntr, sta, reg){
   datadir <- file.path(paste0(getwd(), "/MODIS"))
   dir.create(datadir, showWarnings=FALSE)
 
-  datatif <- file.path(paste0(getwd(), "/tif"))
+  datatif <- file.path(paste0(datadir, "/tif"))
   dir.create(datatif, showWarnings=FALSE)
 
 
