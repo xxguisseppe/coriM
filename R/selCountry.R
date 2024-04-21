@@ -17,9 +17,7 @@
 
 selCountry <- function(cntry){
   st <- ne_states(country = cntry, returnclass = "sv")
-  rr <- cat(paste("Select region:  ", st$name_en), sep='\n')
-  print(rr)
-  return(rr)
+  cat(paste("Region:", st$name_en), sep='\n')
 }
 
 
