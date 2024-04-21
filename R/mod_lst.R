@@ -1,7 +1,8 @@
-#' Get natural earth world state (admin level 1) polygons
+#' Function that downloads 8-day composite MODIS LST data.
+#' The monthly average is generated depending on the chosen date.
 #'
-#' returns GTiff file of Land Surface Temperature for specified region or country
-#' asdasddafasdasd
+#' The output is a "GTiff" file format for the selected Country or Region.
+#'
 #'
 #'
 #' @param sen a character vector of MODIS Sensor name "Terra, Aqua".
@@ -26,15 +27,16 @@
 #'
 #' @examples
 #'
-#' #
+#' The example is for the Region of Puno, for the year 2010 in the month of March.
 #'
-#' mod_lst (sen = "Aqua", usr = "xxguisseppexx", pass = "Artur@123456",
+#' mod_lst (sen = "Aqua", usr = "own_user", pass = "own_password",
 #'           bd = "2010.03.01", ed = "2010.03.31", mnth = "March",
 #'           proj = 4326, cntr = "peru",sta = TRUE, reg = "Puno")
 #'
 #'
 #' @export
 #'
+
 mod_lst  <- function(sen, usr, pass, bd, ed, mnth, proj, cntr, sta, reg){
 
   #------ Create directory MODIS and tif

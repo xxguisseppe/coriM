@@ -1,13 +1,16 @@
-#' Get natural earth world state (admin level 1) polygons
 #'
-#' returns GTiff file of Land Surface Temperature for specified region or country
+#' This function generates data interpolation using the IDW method. The monthly
+#' data acquired was obtained from meteorological stations with maximum and
+#' minimum temperature information for the year 2010 in March, for the whole
+#' region of Puno.
 #'
 #'
-#' @param dat a character vector of MODIS Sensor name "Terra, Aqua".
-#' @param sta a character vector of USERNAME of Earthdata Login.
-#' @param cntr a character vector of PASSWORD of Earthdata Login.
-#' @param coun_cd a character vector, format YYYY.MM.DD, of Start date
-#' @param alt a character vector, format YYYY.MM.DD, of End date
+#'
+#' @param dat the path of the CSV file to read.
+#' @param sta a LOGIC character if you need Country or Regional Boundary.
+#' @param cntr a character vector of country name
+#' @param coun_cd a character vector of ISO CODE of the country
+#' @param alt a LOGIC character, if you need the Altitude or not
 #' @param reg a character vector, name of the Region of the Country
 #'
 #'

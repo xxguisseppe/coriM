@@ -1,4 +1,6 @@
-#' Function to check all the regions in the console and selected
+#' This function will show me in console, all the regions of the country
+#' selected for the calculation in case someone wants to get information of
+#' a more precise area.
 #'
 #' @param cntry character vector country name
 #'
@@ -21,7 +23,7 @@ selCountry <- function(cntry){
 }
 
 
-
+# Load libraries
 
 library(rnaturalearth)
 library(rnaturalearthdata)
