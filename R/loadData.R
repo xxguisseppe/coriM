@@ -10,7 +10,7 @@
 loadData <- function() {
   data_file <- system.file("extdata", "temp.csv", package = "coriM")
   if (file.exists(data_file)) {
-    readr::read_csv(data_file)
+    readr::read_csv(data_file, show_col_types = FALSE)
   } else {
     stop("Data file not found.")
   }

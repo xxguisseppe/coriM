@@ -31,7 +31,7 @@ region of Puno.
 \examples{
 
 file_path <- system.file("extdata", "temp.csv", package = "coriM")
-file <- readr::read_csv(file_path)
+file <- readr::read_csv(file_path, show_col_types = FALSE)
 
 idw_inter(dat = file, sta = TRUE, cntr="peru",coun_cd = 'PE',
  alt = TRUE, reg = "Puno")
