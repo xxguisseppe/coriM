@@ -1,6 +1,7 @@
 #' Get natural earth world state (admin level 1) polygons
 #'
 #' returns GTiff file of Land Surface Temperature for specified region or country
+#' asdasddafasdasd
 #'
 #'
 #' @param sen a character vector of MODIS Sensor name "Terra, Aqua".
