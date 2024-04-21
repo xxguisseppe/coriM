@@ -90,6 +90,24 @@ mod_lst  <- function(sen, usr, pass, bd, ed, mnth, proj, cntr, sta, reg){
   # Crop the raster with the SpatialPolygonsDataFrame
   cropped_raster <- mask(average_temperature, mask=spatial_polygons, inverse=FALSE)
 
+
+
+  raster_df <- as.data.frame(cropped_raster, xy = TRUE, na.rm = TRUE)
+
+  # Plotting the data using ggplot2
+  ggplot(raster_df, aes(x = x, y = y, fill = layer)) +  # use the correct variable name for your data
+    geom_tile() +  # uses tiles to represent raster data
+    coord_fixed() +  # keeps the aspect ratio fixed
+    scale_fill_gradientn(colors = heat.colors(8),
+                         values = scales::rescale(c(6, 10,14, 18, 22, 26, 30,34)),
+                         breaks = c(6,10, 14, 18, 22,26,30, 34),
+                         labels = c("6°C", "10°C", "14°C", "18°C", "22°C", "26°C", "30°C","34°C"),
+                         guide = guide_colourbar(title = "Temperature", title.position = "top",
+                                                 barwidth = 0.5, barheight = 8)) +
+    labs(fill = "Temperature") +  # label for the legend
+    ggtitle("Puno Temperature Map") +  # adds a title
+    theme_minimal()
+
   # Create a new TIF file of the Average temperature
   writeRaster(cropped_raster, filename = paste0(datatif,"/LST_mean_",mnth,".tif"), format = "GTiff", overwrite = TRUE)
 

@@ -2,25 +2,31 @@
 % Please edit documentation in R/idw_inter.R
 \name{idw_inter}
 \alias{idw_inter}
-\title{Get natural earth world state (admin level 1) polygons}
+\title{This function generates data interpolation using the IDW method. The monthly
+data acquired was obtained from meteorological stations with maximum and
+minimum temperature information for the year 2010 in March, for the whole
+region of Puno.}
 \usage{
 idw_inter(dat, sta, cntr, coun_cd, alt, reg)
 }
 \arguments{
-\item{dat}{a character vector of MODIS Sensor name "Terra, Aqua".}
+\item{dat}{the path of the CSV file to read.}
 
-\item{sta}{a character vector of USERNAME of Earthdata Login.}
+\item{sta}{a LOGIC character if you need Country or Regional Boundary.}
 
-\item{cntr}{a character vector of PASSWORD of Earthdata Login.}
+\item{cntr}{a character vector of country name}
 
-\item{coun_cd}{a character vector, format YYYY.MM.DD, of Start date}
+\item{coun_cd}{a character vector of ISO CODE of the country}
 
-\item{alt}{a character vector, format YYYY.MM.DD, of End date}
+\item{alt}{a LOGIC character, if you need the Altitude or not}
 
 \item{reg}{a character vector, name of the Region of the Country}
 }
 \description{
-returns GTiff file of Land Surface Temperature for specified region or country
+This function generates data interpolation using the IDW method. The monthly
+data acquired was obtained from meteorological stations with maximum and
+minimum temperature information for the year 2010 in March, for the whole
+region of Puno.
 }
 \examples{
 

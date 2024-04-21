@@ -2,7 +2,9 @@
 % Please edit documentation in R/selCountry.R
 \name{selCountry}
 \alias{selCountry}
-\title{Function to check all the regions in the console and selected}
+\title{This function will show me in console, all the regions of the country
+selected for the calculation in case someone wants to get information of
+a more precise area.}
 \usage{
 selCountry(cntry)
 }
@@ -10,7 +12,9 @@ selCountry(cntry)
 \item{cntry}{character vector country name}
 }
 \description{
-Function to check all the regions in the console and selected
+This function will show me in console, all the regions of the country
+selected for the calculation in case someone wants to get information of
+a more precise area.
 }
 \examples{
 

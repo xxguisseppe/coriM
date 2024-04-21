@@ -22,10 +22,10 @@ The goal of coriM is to ...
 
 ## Installation
 
-You can install the development version of coriM like sasfdsafsdfsdfsdfo:
+You can install the development version of coriM like :
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+# devtools::install_github("xxguisseppe/coriM")
 ```
 
 ## Example

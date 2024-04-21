@@ -10,11 +10,10 @@ The goal of coriM is to …
 
 ## Installation
 
-You can install the development version of coriM like
-sasfdsafsdfsdfsdfo:
+You can install the development version of coriM like :
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+# devtools::install_github("xxguisseppe/coriM")
 ```
 
 ## Example
@@ -49,4 +48,3 @@ You can also embed plots, for example:
 
 In that case, don’t forget to commit and push the resulting figure
 files, so they display on GitHub and CRAN.
-# coriM

@@ -36,6 +36,7 @@
 #'
 #'
 #' @export
+
 idw_inter <- function(dat, sta, cntr, coun_cd, alt, reg){
 
 
@@ -131,8 +132,21 @@ idw_inter <- function(dat, sta, cntr, coun_cd, alt, reg){
   # Project the raster to geographic coordinates if needed
   idw_raster <- project(idw_raster, crs(geog))
 
-  # Plot the final IDW raster
-  plot(idw_raster)
+  df <- as.data.frame(idw_raster, xy = TRUE)
+
+  # Plotting the data using ggplot2
+  ggplot(df, aes(x = x, y = y, fill = var1.pred)) +  # use the correct variable name for your data
+    geom_tile() +  # uses tiles to represent raster data
+    coord_fixed() +  # keeps the aspect ratio fixed
+    scale_fill_gradientn(colors = heat.colors(7),
+                         values = scales::rescale(c(14, 16,18, 20, 22, 24, 26)),
+                         breaks = c(14, 16,18, 20, 22, 24, 26),
+                         labels = c("14°C", "16°C", "18°C", "20°C", "22°C", "24°C", "26°C"),
+                         guide = guide_colourbar(title = "Temperature", title.position = "top",
+                                                 barwidth = 0.5, barheight = 6)) +
+    labs(fill = "Temperature") +  # label for the legend
+    ggtitle("Puno Temperature Map") +  # adds a title
+    theme_minimal()
 
 
   #------ Create directory CSV files
@@ -141,6 +155,11 @@ idw_inter <- function(dat, sta, cntr, coun_cd, alt, reg){
 
   # Write the raster to file
   writeRaster(idw_raster, filename = paste0(datatif,"/",reg,"_idwd.tif"), overwrite = TRUE)
+
+
+
+
+
 
 }
 

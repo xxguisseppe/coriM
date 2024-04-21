@@ -2,7 +2,9 @@
 % Please edit documentation in R/loadData.R
 \name{loadData}
 \alias{loadData}
-\title{Load Sample Data}
+\title{Load Sample Data
+Function in case you want to observe the type of data to be interpolated
+with the IDW method.}
 \usage{
 loadData()
 }
