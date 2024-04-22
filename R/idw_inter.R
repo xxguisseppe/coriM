@@ -28,8 +28,12 @@
 #'
 #' @examples
 #'
+#' Load the data example
+#'
 #' file_path <- system.file("extdata", "temp.csv", package = "coriM")
 #' file <- readr::read_csv(file_path, show_col_types = FALSE)
+#'
+#' Run the IDW function
 #'
 #' idw_inter(dat = file, sta = TRUE, cntr="peru",coun_cd = 'PE',
 #'  alt = TRUE, reg = "Puno")
@@ -155,10 +159,6 @@ idw_inter <- function(dat, sta, cntr, coun_cd, alt, reg){
 
   # Write the raster to file
   writeRaster(idw_raster, filename = paste0(datatif,"/",reg,"_idwd.tif"), overwrite = TRUE)
-
-
-
-
 
 
 }

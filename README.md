@@ -28,13 +28,13 @@ You can install the development version of **coriM** as follows
 If you are prompted for the `rnaturalearth` and `MODIStsp` libraries,
 they are installed as follows:
 
-- rnaturalearth library:
+- MODIStsp library:
 
 ``` r
  if (!requireNamespace("MODIStsp", quietly = TRUE))  devtools::install_github("ropensci/MODIStsp")
 ```
 
-- MODIStsp library:
+- rnaturalearth library:
 
 ``` r
  if (!requireNamespace("rnaturalearth", quietly = TRUE))  devtools::install_github("ropensci/rnaturalearth")
@@ -48,27 +48,45 @@ The result of the examples produces two files in `TIF format` for the
 selected region. In this case the example is based on the regional map
 of Puno in Peru. The information is from the month of March 2010.
 
+**1. Begin with loading the Library**
+
 ``` r
-## Loading Library
+## Load Library
  library(coriM)
 ```
 
-It starts by loading the data for spatial interpolation.
+**2. Loading example data in `CSV` format for spatial interpolation.**
 
 ``` r
 ## Load example data
- file <- loadData()
+file <- loadData()
+```
 
-## Load function for IDW interpolation calculation
+**3. Run IDW interpolation function**
+
+``` r
+## Load IDW function with specific inputs
  idw_inter(dat = file, sta = TRUE, cntr="peru",coun_cd = 'PE', alt = TRUE, reg = "Puno")
 ```
 
-In the same way, the example for the calculation of monthly average Land
-Surface Temperature obtained from MODIS satellite is presented.
+**4. Generate monthly average LST from MODIS function**
 
 ``` r
 ## Load function for MODIS LST monthly calculation
 mod_lst (sen = "Aqua", usr = "own_user", pass = "own_password",
            bd = "2010.03.01", ed = "2010.03.31", mnth = "March",
            proj = 4326, cntr = "peru",sta = TRUE, reg = "Puno")
+```
+
+**5. Finally, if you have your own data, you can do this**
+
+``` r
+## Load own data
+file <- ./yourpath/yourfile.csv
+```
+
+``` r
+## If you want to work with regional data
+### Load & select region based on the country selected
+    selCountry(cntry = "chile")
 ```
