@@ -12,6 +12,7 @@
 #' @param coun_cd a character vector of ISO CODE of the country
 #' @param alt a LOGIC character, if you need the Altitude or not
 #' @param reg a character vector, name of the Region of the Country
+#' @param temp a character vector, select "tx" or "tn" for max or min temperature
 #'
 #'
 #' @import geodata
@@ -25,6 +26,11 @@
 #' @import readr
 #' @importFrom dplyr mutate
 #' @importFrom methods as
+#' @import ggsn
+#' @import maptools
+#' @import gridExtra
+#' @import ggplot2
+#' @import RColorBrewer
 #'
 #' @examples
 #'
@@ -36,13 +42,12 @@
 #' Run the IDW function
 #'
 #' idw_inter(dat = file, sta = TRUE, cntr="peru",coun_cd = 'PE',
-#'  alt = TRUE, reg = "Puno")
+#'  alt = TRUE, reg = "Puno", temp ="tx")
 #'
 #'
 #' @export
 
-idw_inter <- function(dat, sta, cntr, coun_cd, alt, reg){
-
+idw_inter <- function(dat, sta, cntr, coun_cd, alt, reg, temp){
 
   if (sta == TRUE) {
     st <- ne_states(country = cntr, returnclass = "sv")
@@ -127,7 +132,12 @@ idw_inter <- function(dat, sta, cntr, coun_cd, alt, reg){
   pnts <- methods::as(pnts, 'Spatial')
 
   # Perform IDW interpolation using gstat and convert to 'SpatRaster'
-  idw_result <- idw(formula = tx ~ 1, locations = pnts, newdata = grd, idp = 2.0) # idp is the power parameter
+  if (temp == "tx") {
+    idw_result <- idw(formula = tx ~ 1, locations = pnts, newdata = grd, idp = 2.0) # idp is the power parameter
+  }else{
+    idw_result <- idw(formula = tn ~ 1, locations = pnts, newdata = grd, idp = 2.0) # idp is the power parameter
+  }
+
   idw_raster <- rast(idw_result)
 
   # Crop and mask the interpolated raster to the extent of the original GTML data
@@ -136,31 +146,62 @@ idw_inter <- function(dat, sta, cntr, coun_cd, alt, reg){
   # Project the raster to geographic coordinates if needed
   idw_raster <- project(idw_raster, crs(geog))
 
+
   df <- as.data.frame(idw_raster, xy = TRUE)
 
+
+  a <- min(df$x); b <- max(df$x)
+  c <- min(df$y); d <- max(df$y)
+  rango <- round(seq(from = min(df$var1.pred), to = max(df$var1.pred), length.out = 8),0)
+
+  col_pal <- "YlOrRd"
+  cbar <- plot_discrete_cbar(rango,
+                             spacing = "constant", font_size = 4, expand_size = 0.2,
+                             palette = col_pal, legend_direction="horizontal", legend_title="Temperature [°C]", border_color="black")
+
   # Plotting the data using ggplot2
-  ggplot(df, aes(x = x, y = y, fill = var1.pred)) +  # use the correct variable name for your data
+  pl <- ggplot(df, aes(x = x, y = y, fill = var1.pred)) +  # use the correct variable name for your data
     geom_tile() +  # uses tiles to represent raster data
-    coord_fixed() +  # keeps the aspect ratio fixed
-    scale_fill_gradientn(colors = heat.colors(7),
-                         values = scales::rescale(c(14, 16,18, 20, 22, 24, 26)),
-                         breaks = c(14, 16,18, 20, 22, 24, 26),
-                         labels = c("14°C", "16°C", "18°C", "20°C", "22°C", "24°C", "26°C"),
-                         guide = guide_colourbar(title = "Temperature", title.position = "top",
-                                                 barwidth = 0.5, barheight = 6)) +
-    labs(fill = "Temperature") +  # label for the legend
-    ggtitle("Puno Temperature Map") +  # adds a title
-    theme_minimal()
+    coord_cartesian(
+      xlim = c(a,b),
+      ylim = c(c,d)) +
+    scale_fill_distiller(palette = col_pal, direction = 1, type = "seq") +
+    labs(
+      x = "Longitude [°]\n", y = "Latitude [°]\n", title = paste0("IDW Temperature Interpolation Map \n", reg)) +
+    guides(
+      fill = guide_colourbar(order = 1)) +
+    guides(fill = "none") +
+    theme_classic() +
+    theme(
+      plot.title = element_text(face="bold", hjust = 0.5, size=12),
+      #legend.position = "none",
+      legend.position="bottom",
+      legend.box = "horizontal",
+      legend.title = element_text(colour="black", size=9, face="bold", hjust = 0.5),
+      legend.text = element_text(colour="black", size=7),
+      legend.key.height = unit(0.3, "in"),
+      legend.background = element_rect(fill="#e6ffff", linewidth=0.5, linetype="solid", colour ="black"),
+      axis.title.x = element_text(color="black", size=10, face="bold", hjust = 0.5),
+      axis.title.y = element_text(color="black", size=10, face="bold", hjust = 0.5 ),
+      plot.margin = unit(c(20,40,0,20), "pt")
+      )
+
+  cbar <- cbar + theme(plot.margin = unit(c(10, 5, 50, 20), "pt"))
+
+  png(filename =  paste0(getwd(), "/",reg,"_",temp,".png"), width = 2020, height = 3260, units = "px", pointsize = 9, res = 350 )
+  pm <- grid.arrange(pl, cbar, nrow=2, heights=c(7, 1.5))
+  print(pm)
+  dev.off()
+
+
 
 
   #------ Create directory CSV files
-  datatif <- file.path(paste0(datadir, "/tif"))
+  datatif <- file.path(paste0(datadir, "/Gtif"))
   dir.create(datatif, showWarnings=FALSE)
 
   # Write the raster to file
   writeRaster(idw_raster, filename = paste0(datatif,"/",reg,"_idwd.tif"), overwrite = TRUE)
-
-
 }
 
 
@@ -179,6 +220,9 @@ if (!requireNamespace("rnaturalearth", quietly = TRUE))  devtools::install_githu
 if (!requireNamespace("raster", quietly = TRUE))  install.packages("raster")
 if (!requireNamespace("rnaturalearthdata", quietly = TRUE)) devtools::install_github("ropensci/rnaturalearthdata")
 if (!requireNamespace("rnaturalearthhires", quietly = TRUE))  devtools::install_github("ropensci/rnaturalearthhires")
+if (!requireNamespace("maptools", quietly = TRUE)) install.packages("maptools", repos = "https://packagemanager.posit.co/cran/2023-10-13")
+if (!requireNamespace("ggsn", quietly = TRUE))  devtools::install_github('oswaldosantos/ggsn')
+if (!requireNamespace("gridExtra", quietly = TRUE))  install.packages("gridExtra")
 
 # Load libraries ----------------------------------------------------------
 library(geodata)
@@ -189,5 +233,8 @@ library(rnaturalearth)
 library(rnaturalearthdata)
 library(rnaturalearthhires)
 library(raster)
-
-
+library(maptools)
+library(ggsn)
+library(gridExtra)
+library(ggplot2)
+library(RColorBrewer)

@@ -7,7 +7,7 @@ data acquired was obtained from meteorological stations with maximum and
 minimum temperature information for the year 2010 in March, for the whole
 region of Puno.}
 \usage{
-idw_inter(dat, sta, cntr, coun_cd, alt, reg)
+idw_inter(dat, sta, cntr, coun_cd, alt, reg, temp)
 }
 \arguments{
 \item{dat}{the path of the CSV file to read.}
@@ -21,6 +21,8 @@ idw_inter(dat, sta, cntr, coun_cd, alt, reg)
 \item{alt}{a LOGIC character, if you need the Altitude or not}
 
 \item{reg}{a character vector, name of the Region of the Country}
+
+\item{temp}{a character vector, select "tx" or "tn" for max or min temperature}
 }
 \description{
 This function generates data interpolation using the IDW method. The monthly

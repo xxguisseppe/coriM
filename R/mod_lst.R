@@ -24,18 +24,25 @@
 #' @import rnaturalearthdata
 #' @import rnaturalearthhires
 #' @importFrom methods as
+#' @import ggsn
+#' @import maptools
+#' @import gridExtra
+#' @import ggplot2
+#' @import RColorBrewer
 #'
 #' @examples
 #'
 #' The example is for the Region of Puno, for the year 2010 in the month of March.
 #'
-#' mod_lst (sen = "Aqua", usr = "own_user", pass = "own_password",
+#' mod_lst (sen = "Terra", usr = 'xxguisseppexx', pass = 'Arturo!23456',
 #'           bd = "2010.03.01", ed = "2010.03.31", mnth = "March",
 #'           proj = 4326, cntr = "peru",sta = TRUE, reg = "Puno")
 #'
 #'
 #' @export
 #'
+
+#sf::sf_extSoftVersion()
 
 mod_lst  <- function(sen, usr, pass, bd, ed, mnth, proj, cntr, sta, reg){
 
@@ -59,13 +66,16 @@ mod_lst  <- function(sen, usr, pass, bd, ed, mnth, proj, cntr, sta, reg){
     numeric_coordinates <- st_bbox(st)
   }
 
-
-
   #------ Download MODIS LST 8-Days Composite in GTiff format
-  mf <- MODIStsp::MODIStsp(gui = FALSE, out_folder = datadir, selprod = "Surf_Temp_8Days_1Km (M*D11A2)",
-                           bandsel = "LST_Day_1km", sensor = sen, user = usr,password = pass, start_date = bd, end_date = ed,
-                           out_format = "GTiff", delete_hdf = TRUE, spatmeth = "bbox",
-                           bbox = numeric_coordinates, output_proj = proj)
+  mf <- MODIStsp::MODIStsp(gui = FALSE, out_folder = datadir,
+                           selprod = "Surf_Temp_8Days_1Km (M*D11A2)",
+                           bandsel = "LST_Day_1km", sensor = sen,
+                           user = 'Guisseppe',
+                           password = "Arturo!23456",
+                           start_date = bd, end_date = ed,
+                           out_format = "GTiff", delete_hdf = TRUE,
+                           spatmeth = "bbox",
+                           bbox = numeric_coordinates, output_proj = 4326)
 
 
   #------ Processing for Monthly calculation of LST composite
@@ -95,18 +105,52 @@ mod_lst  <- function(sen, usr, pass, bd, ed, mnth, proj, cntr, sta, reg){
   raster_df <- as.data.frame(cropped_raster, xy = TRUE, na.rm = TRUE)
 
   # Plotting the data using ggplot2
-  ggplot(raster_df, aes(x = x, y = y, fill = layer)) +  # use the correct variable name for your data
+  a <- min(raster_df$x); b <- max(raster_df$x)
+  c <- min(raster_df$y); d <- max(raster_df$y)
+  rango <- round(seq(from = min(raster_df$layer), to = max(raster_df$layer), length.out = 8),0)
+
+  col_pal <- "YlOrRd"
+  cbar <- plot_discrete_cbar(rango,
+                             spacing = "constant", font_size = 4, expand_size = 0.2,
+                             palette = col_pal, legend_direction="horizontal", legend_title="Temperature [°C]", border_color="black")
+
+  # Plotting the data using ggplot2
+  pl <- ggplot(raster_df, aes(x = x, y = y, fill = layer)) +  # use the correct variable name for your data
     geom_tile() +  # uses tiles to represent raster data
-    coord_fixed() +  # keeps the aspect ratio fixed
-    scale_fill_gradientn(colors = heat.colors(8),
-                         values = scales::rescale(c(6, 10,14, 18, 22, 26, 30,34)),
-                         breaks = c(6,10, 14, 18, 22,26,30, 34),
-                         labels = c("6°C", "10°C", "14°C", "18°C", "22°C", "26°C", "30°C","34°C"),
-                         guide = guide_colourbar(title = "Temperature", title.position = "top",
-                                                 barwidth = 0.5, barheight = 8)) +
-    labs(fill = "Temperature") +  # label for the legend
-    ggtitle("Puno Temperature Map") +  # adds a title
-    theme_minimal()
+    coord_cartesian(
+      xlim = c(a,b),
+      ylim = c(c,d)) +
+    scale_fill_distiller(palette = col_pal, direction = 1, type = "seq") +
+    labs(
+      x = "Longitude [°]\n", y = "Latitude [°]\n", title = paste0("MODIS Temperature Map \n", reg)) +
+    guides(
+      fill = guide_colourbar(order = 1)) +
+    guides(fill = "none") +
+    theme_classic() +
+    theme(
+      plot.title = element_text(face="bold", hjust = 0.5, size=12),
+      #legend.position = "none",
+      legend.position="bottom",
+      legend.box = "horizontal",
+      legend.title = element_text(colour="black", size=9, face="bold", hjust = 0.5),
+      legend.text = element_text(colour="black", size=7),
+      legend.key.height = unit(0.3, "in"),
+      legend.background = element_rect(fill="#e6ffff", linewidth=0.5, linetype="solid", colour ="black"),
+      axis.title.x = element_text(color="black", size=10, face="bold", hjust = 0.5),
+      axis.title.y = element_text(color="black", size=10, face="bold", hjust = 0.5 ),
+      plot.margin = unit(c(20,40,0,20), "pt")
+    )
+
+  cbar <- cbar + theme(plot.margin = unit(c(10, 5, 50, 20), "pt"))
+
+  png(filename =  paste0(getwd(), "/",reg,"_MODIS_LST.png"), width = 2020, height = 3260, units = "px", pointsize = 9, res = 350 )
+  pm <- gridExtra::grid.arrange(pl, cbar, nrow=2, heights=c(7, 1.5))
+  print(pm)
+  dev.off()
+
+
+
+
 
   # Create a new TIF file of the Average temperature
   writeRaster(cropped_raster, filename = paste0(datatif,"/LST_mean_",mnth,".tif"), format = "GTiff", overwrite = TRUE)
@@ -124,6 +168,9 @@ if (!requireNamespace("MODIStsp", quietly = TRUE))  devtools::install_github("ro
 if (!requireNamespace("rnaturalearth", quietly = TRUE))  devtools::install_github("ropensci/rnaturalearth")
 if (!requireNamespace("rnaturalearthdata", quietly = TRUE)) devtools::install_github("ropensci/rnaturalearthdata")
 if (!requireNamespace("rnaturalearthhires", quietly = TRUE))  devtools::install_github("ropensci/rnaturalearthhires")
+if (!requireNamespace("maptools", quietly = TRUE)) install.packages("maptools", repos = "https://packagemanager.posit.co/cran/2023-10-13")
+if (!requireNamespace("ggsn", quietly = TRUE))  devtools::install_github('oswaldosantos/ggsn')
+if (!requireNamespace("gridExtra", quietly = TRUE))  install.packages("gridExtra")
 
 
 # Load Libraries
@@ -132,19 +179,10 @@ library(MODIStsp)
 library(sf)
 library(rnaturalearth)
 library(sp)
-library(rnaturalearthdata)
-library(rnaturalearthhires)
-
-
-
-
-
-
-
-
-
-
-
-
-
+library(raster)
+library(maptools)
+#library(ggsn)
+library(gridExtra)
+library(ggplot2)
+library(RColorBrewer)
 
