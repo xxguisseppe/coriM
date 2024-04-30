@@ -94,7 +94,7 @@ mod_lst  <- function (sen, usr, pass, bd, ed, mnth, proj, cntr, sta, reg){
   df <- as.data.frame(cropped_raster, xy = TRUE, na.rm = TRUE)
 
 
-  ggplot(df, aes(x = .data$x, y = .data$y, fill = .data$layer)) +  # use the correct variable name for your data
+  pm <- ggplot(df, aes(x = .data$x, y = .data$y, fill = .data$layer)) +  # use the correct variable name for your data
     ggplot2::geom_tile() +  # uses tiles to represent raster data
     ggplot2::scale_fill_distiller(palette = "YlOrRd", direction = 1, type = "seq") +
     ggplot2::coord_fixed() +  # keeps the aspect ratio fixed
@@ -104,6 +104,8 @@ mod_lst  <- function (sen, usr, pass, bd, ed, mnth, proj, cntr, sta, reg){
     ggplot2::theme(
       plot.title = ggplot2::element_text(face="bold", hjust = 0.5, size=12))
 
+
+  print(pm)
 
 
 
