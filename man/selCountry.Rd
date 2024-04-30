@@ -18,6 +18,6 @@ a more precise area.
 }
 \examples{
 
-selCountry(cntry = "peru")
+selCountry("peru")
 
 }

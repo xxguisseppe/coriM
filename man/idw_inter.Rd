@@ -30,17 +30,3 @@ data acquired was obtained from meteorological stations with maximum and
 minimum temperature information for the year 2010 in March, for the whole
 region of Puno.
 }
-\examples{
-
-Load the data example
-
-file_path <- system.file("extdata", "temp.csv", package = "coriM")
-file <- readr::read_csv(file_path, show_col_types = FALSE)
-
-Run the IDW function
-
-idw_inter(dat = file, sta = TRUE, cntr="peru",coun_cd = 'PE',
- alt = TRUE, reg = "Puno")
-
-
-}

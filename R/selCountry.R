@@ -10,7 +10,7 @@
 #'
 #' @examples
 #'
-#' selCountry(cntry = "peru")
+#' selCountry("peru")
 #'
 #' @export
 

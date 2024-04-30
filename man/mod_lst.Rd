@@ -31,13 +31,3 @@ mod_lst(sen, usr, pass, bd, ed, mnth, proj, cntr, sta, reg)
 \description{
 The output is a "GTiff" file format for the selected Country or Region.
 }
-\examples{
-
-The example is for the Region of Puno, for the year 2010 in the month of March.
-
-mod_lst (sen = "Terra", usr = 'xxguisseppexx', pass = "Artur@123456",
-          bd = "2010.03.01", ed = "2010.03.31", mnth = "March",
-          proj = 4326, cntr = "peru",sta = TRUE, reg = "Puno")
-
-
-}

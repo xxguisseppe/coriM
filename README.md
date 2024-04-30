@@ -62,12 +62,16 @@ of Puno in Peru. The information is from the month of March 2010.
 file <- loadData()
 ```
 
+<img src="man/figures/README-data_temp.png" width="100%"/>
+
 **3. Run IDW interpolation function**
 
 ``` r
 ## Load IDW function with specific inputs
  idw_inter(dat = file, sta = TRUE, cntr="peru",coun_cd = 'PE', alt = TRUE, reg = "Puno")
 ```
+
+<img src="man/figures/README-IDW.png" width="100%"/>
 
 **4. Generate monthly average LST from MODIS function**
 
@@ -78,7 +82,8 @@ mod_lst (sen = "Aqua", usr = "own_user", pass = "own_password",
            proj = 4326, cntr = "peru",sta = TRUE, reg = "Puno")
 ```
 
-**5. Finally, if you have your own data, you can do this**
+<img src="man/figures/README-MODIS.png" width="100%"/> **5. Finally, if
+you have your own data, you can do this**
 
 ``` r
 ## Load own data

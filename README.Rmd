@@ -56,12 +56,16 @@ The result of the examples produces two files in `TIF format` for the selected r
 ## Load example data
 file <- loadData()
 ```
+<img src="man/figures/README-data_temp.png" width="100%"/>
 
 **3.    Run IDW interpolation function**
 ```r
 ## Load IDW function with specific inputs
  idw_inter(dat = file, sta = TRUE, cntr="peru",coun_cd = 'PE', alt = TRUE, reg = "Puno")
 ```
+
+<img src="man/figures/README-IDW.png" width="100%"/>
+
 **4.    Generate monthly average LST from MODIS function**
 ```r
 ## Load function for MODIS LST monthly calculation
@@ -69,6 +73,8 @@ mod_lst (sen = "Aqua", usr = "own_user", pass = "own_password",
            bd = "2010.03.01", ed = "2010.03.31", mnth = "March",
            proj = 4326, cntr = "peru",sta = TRUE, reg = "Puno")
 ```
+
+<img src="man/figures/README-MODIS.png" width="100%"/>
 **5.    Finally, if you have your own data, you can do this**
 ```r
 ## Load own data

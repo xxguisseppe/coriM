@@ -1,37 +1,32 @@
 Package: coriM
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Provides Monthly Interpolations Using IDW
 Version: 0.0.0.9000
 Author: Guisseppe A. Vasquez Villano
-Maintainer: The package maintainer <guisseppe.19@hotmail.com>
-Description: This coriM package is designed to perform monthly interpolations 
-    using the Inverse Distance Weighting (IDW) method, based on 
-    temperature records obtained from various weather stations
+Maintainer: Guisseppe A. Vasquez Villano <guisseppe.19@hotmail.com>
+Description: The coriM package is designed to perform monthly interpolations using the Inverse Distance Weighting (IDW) method. It utilizes temperature records obtained from various weather stations.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
-Imports: 
-    terra,
-    MODIStsp,
-    sf,
-    rnaturalearth,
-    sp,
-    geodata,
-    tidyverse,
-    gstat,
-    raster,
-    readr,
-    dplyr,
-    methods,
-    rnaturalearthdata,
-    rnaturalearthhires,
-    ggsn,
-    maptools,
-    gridExtra,
-    RColorBrewer,
-    ggplot2
-Suggests: 
+Imports:
+  terra,
+  raster,
+  MODIStsp,
+  sf,
+  rnaturalearth,
+  sp,
+  rnaturalearthdata,
+  rnaturalearthhires,
+  methods,
+  readr,
+  RColorBrewer,
+  dplyr,
+  geodata,
+  ggplot2,
+  gstat,
+  tidyverse
+Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
