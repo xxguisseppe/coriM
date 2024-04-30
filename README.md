@@ -68,7 +68,7 @@ file <- loadData()
 
 ``` r
 ## Load IDW function with specific inputs
- idw_inter(dat = file, sta = TRUE, cntr="peru",coun_cd = 'PE', alt = TRUE, reg = "Puno")
+ idw_inter(dat = file, sta = TRUE, cntr="peru",coun_cd = 'PE', alt = TRUE, reg = "Puno", temp="tx")
 ```
 
 <img src="man/figures/README-IDW.png" width="100%"/>
