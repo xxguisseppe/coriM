@@ -3,9 +3,9 @@ Type: Package
 Title: Provides Monthly Interpolations Using IDW
 Version: 0.0.0.9000
 Author: Guisseppe A. Vasquez Villano
-Maintainer: Guisseppe A. Vasquez Villano <guisseppe.19@hotmail.com>
+Maintainer: Guisseppe A. Vasquez Villano <xxguisseppexx@gmail.com>
 Description: The coriM package is designed to perform monthly interpolations using the Inverse Distance Weighting (IDW) method. It utilizes temperature records obtained from various weather stations.
-License: MIT + file LICENSE
+License: MIT
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
