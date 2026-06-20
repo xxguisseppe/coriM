@@ -1,97 +1,196 @@
+# coriM: Spatial Temperature Interpolation and MODIS LST Processing in R
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+`coriM` is an R package for geospatial climate analysis. It provides tools to interpolate temperature data from meteorological stations using Inverse Distance Weighting (IDW) and to process MODIS Land Surface Temperature (LST) products.
 
-# coriM
+The package is designed for regional temperature mapping, especially in areas where weather stations are sparse or unevenly distributed. By combining station-based interpolation with satellite-derived LST, `coriM` supports climate, environmental, and agricultural spatial analysis.
 
-<!-- badges: start -->
-<!-- badges: end -->
+---
 
-CoriM is designed with two key functions: `idw_inter` and `mod_lst`. The
-`idw_inter` function specializes in creating interpolated maps using the
-IDW (Inverse Distance Weighting) methodology. This process utilizes
-precise point data, such as maximum and minimum temperatures collected
-from weather stations, to generate detailed surface representations. On
-the other hand, `mod_lst` focuses on producing spatial information from
-the surface temperature data of the MODIS M\*D11A2 satellite, whether
-from Aqua or Terra. A significant advantage of combining these two types
-of information is the ability to identify regions where the IDW
-interpolation might have greater or lesser accuracy in its estimates.
+## Main Features
+
+* Temperature interpolation from meteorological station data using IDW
+* MODIS Land Surface Temperature processing from Aqua or Terra products
+* Raster output generation in GeoTIFF format
+* Regional analysis using administrative boundaries
+* Example workflow for Puno, Peru
+* Reproducible geospatial workflow in R
+
+---
+
+## Main Functions
+
+| Function       | Description                                                                        |
+| -------------- | ---------------------------------------------------------------------------------- |
+| `idw_inter()`  | Interpolates station-based temperature data using IDW and generates raster outputs |
+| `mod_lst()`    | Processes MODIS Land Surface Temperature products                                  |
+| `loadData()`   | Loads example station data included in the package                                 |
+| `selCountry()` | Selects country or regional boundaries for spatial analysis                        |
+
+---
 
 ## Installation
 
-You can install the development version of **coriM** as follows
+You can install the development version of `coriM` from GitHub:
 
-``` r
- devtools::install_github("xxguisseppe/coriM")
+```r
+# Install devtools if needed
+install.packages("devtools")
+
+# Install coriM
+devtools::install_github("xxguisseppe/coriM")
 ```
 
-If you are prompted for the `rnaturalearth` and `MODIStsp` libraries,
-they are installed as follows:
+If required, install the additional spatial and MODIS-related dependencies:
 
-- MODIStsp library:
+```r
+# MODIS processing package
+if (!requireNamespace("MODIStsp", quietly = TRUE)) {
+  devtools::install_github("ropensci/MODIStsp")
+}
 
-``` r
- if (!requireNamespace("MODIStsp", quietly = TRUE))  devtools::install_github("ropensci/MODIStsp")
+# Natural Earth spatial boundaries
+if (!requireNamespace("rnaturalearth", quietly = TRUE)) {
+  devtools::install_github("ropensci/rnaturalearth")
+}
+
+if (!requireNamespace("rnaturalearthdata", quietly = TRUE)) {
+  devtools::install_github("ropensci/rnaturalearthdata")
+}
+
+if (!requireNamespace("rnaturalearthhires", quietly = TRUE)) {
+  devtools::install_github("ropensci/rnaturalearthhires")
+}
 ```
 
-- rnaturalearth library:
+---
 
-``` r
- if (!requireNamespace("rnaturalearth", quietly = TRUE))  devtools::install_github("ropensci/rnaturalearth")
- if (!requireNamespace("rnaturalearthdata", quietly = TRUE)) devtools::install_github("ropensci/rnaturalearthdata")
- if (!requireNamespace("rnaturalearthhires", quietly = TRUE)) devtools::install_github("ropensci/rnaturalearthhires")
+## Example Workflow
+
+The example below generates two GeoTIFF outputs for the Puno region in Peru using data from March 2010: one interpolated temperature surface from station data and one MODIS-based Land Surface Temperature product.
+
+### 1. Load the package
+
+```r
+library(coriM)
 ```
 
-## Example
+### 2. Load example station data
 
-The result of the examples produces two files in `TIF format` for the
-selected region. In this case the example is based on the regional map
-of Puno in Peru. The information is from the month of March 2010.
-
-**1. Begin with loading the Library**
-
-``` r
-## Load Library
- library(coriM)
-```
-
-**2. Loading example data in `CSV` format for spatial interpolation.**
-
-``` r
-## Load example data
+```r
 file <- loadData()
 ```
 
-<img src="man/figures/README-data_temp.png" width="100%"/>
+Example station data:
 
-**3. Run IDW interpolation function**
+![Example meteorological station data](man/figures/README-data_temp.png)
 
-``` r
-## Load IDW function with specific inputs
- idw_inter(dat = file, sta = TRUE, cntr="peru",coun_cd = 'PE', alt = TRUE, reg = "Puno", temp="tx")
+### 3. Run IDW temperature interpolation
+
+```r
+idw_inter(
+  dat = file,
+  sta = TRUE,
+  cntr = "peru",
+  coun_cd = "PE",
+  alt = TRUE,
+  reg = "Puno",
+  temp = "tx"
+)
 ```
 
-<img src="man/figures/README-IDW.png" width="100%"/>
+IDW interpolation output:
 
-**4. Generate monthly average LST from MODIS function**
+![IDW temperature interpolation map for Puno](man/figures/README-IDW.png)
 
-``` r
-## Load function for MODIS LST monthly calculation
-mod_lst (sen = "Aqua", usr = "own_user", pass = "own_password",
-           bd = "2010.03.01", ed = "2010.03.31", mnth = "March",
-           proj = 4326, cntr = "peru",sta = TRUE, reg = "Puno")
+### 4. Generate monthly MODIS Land Surface Temperature
+
+```r
+mod_lst(
+  sen = "Aqua",
+  usr = "your_user",
+  pass = "your_password",
+  bd = "2010.03.01",
+  ed = "2010.03.31",
+  mnth = "March",
+  proj = 4326,
+  cntr = "peru",
+  sta = TRUE,
+  reg = "Puno"
+)
 ```
 
-<img src="man/figures/README-MODIS.png" width="100%"/> **5. Finally, if
-you have your own data, you can do this**
+MODIS LST output:
 
-``` r
-## Load own data
-file <- ./yourpath/yourfile.csv
+![MODIS Land Surface Temperature map for Puno](man/figures/README-MODIS.png)
+
+---
+
+## Using Your Own Data
+
+You can also use your own station data in CSV format:
+
+```r
+file <- "path/to/your_file.csv"
 ```
 
-``` r
-## If you want to work with regional data
-### Load & select region based on the country selected
-    selCountry(cntry = "chile")
+For regional analysis, select the country or region of interest:
+
+```r
+selCountry(cntry = "chile")
 ```
+
+---
+
+## Repository Structure
+
+```text
+coriM/
+├── R/                  # Main R functions
+├── inst/extdata/       # Example data
+├── man/                # Function documentation and README figures
+├── tests/testthat/     # Unit tests
+├── renv/               # Reproducible R environment
+├── DESCRIPTION         # Package metadata
+├── NAMESPACE           # Exported functions
+├── README.Rmd          # Source README
+└── README.md           # GitHub README
+```
+
+---
+
+## Skills Demonstrated
+
+* R package development
+* Spatial interpolation
+* Raster data processing
+* MODIS Land Surface Temperature analysis
+* Climate and meteorological data processing
+* Remote sensing for environmental applications
+* Reproducible geospatial workflows
+
+---
+
+## Potential Applications
+
+* Agricultural climate monitoring
+* Environmental assessment
+* Regional temperature mapping
+* Remote sensing validation
+* Climate analysis in data-sparse regions
+* Comparison between station-based and satellite-based temperature estimates
+
+---
+
+## Author
+
+**Guisseppe A. Vasquez Villano**
+M.Sc. Geoinformatics, University of Würzburg
+
+GitHub: [xxguisseppe](https://github.com/xxguisseppe)
+LinkedIn: [Guisseppe A. Vasquez Villano](https://www.linkedin.com/in/guisseppev-met/)
+
+---
+
+## License
+
+MIT License
